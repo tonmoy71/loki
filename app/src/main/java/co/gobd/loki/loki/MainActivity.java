@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.SupportMapFragment;
 
 
 public class MainActivity extends FragmentActivity {
@@ -18,7 +18,6 @@ public class MainActivity extends FragmentActivity {
     private static final int GPS_ERRORDIALOG_REQUEST = 9001;
 
     GoogleMap mMap;
-    MapView mMapView;
 
 
     @Override
@@ -26,10 +25,15 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         if (servicesOk()) {
-            Toast.makeText(this, "Ready to map!", Toast.LENGTH_SHORT).show();
-            setContentView(R.layout.activity_mapview);
-            mMapView = (MapView) findViewById(R.id.map);
-            mMapView.onCreate(savedInstanceState);
+
+            setContentView(R.layout.activity_map);
+
+            if (initMap()) {
+                Toast.makeText(this, "Ready to map!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Map not available!", Toast.LENGTH_SHORT).show();
+            }
+
         } else {
             setContentView(R.layout.activity_main);
         }
@@ -76,33 +80,14 @@ public class MainActivity extends FragmentActivity {
         return false;
     }
 
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
-    }
+    private boolean initMap() {
+        if (mMap == null) {
+            // Get reference to the map fragment
+            SupportMapFragment mapFrag =
+                    (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            mMap = mapFrag.getMap();
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mMapView.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mMapView.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mMapView.onResume();
+        }
+        return (mMap != null);
     }
 }
