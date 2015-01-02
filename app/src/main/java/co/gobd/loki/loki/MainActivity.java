@@ -1,5 +1,13 @@
 package co.gobd.loki.loki;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
 import android.app.Dialog;
 import android.location.Address;
 import android.location.Geocoder;
@@ -12,14 +20,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -27,8 +27,6 @@ import java.util.List;
 public class MainActivity extends FragmentActivity {
 
     private static final int GPS_ERRORDIALOG_REQUEST = 9001;
-
-    GoogleMap mMap;
 
     private static final double SEATTLE_LAT = 47.60621,
             SEATTLE_LNG = -122.33207,
@@ -39,6 +37,7 @@ public class MainActivity extends FragmentActivity {
 
     private static final float DEFAULT_ZOOM = 3;
 
+    GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +140,6 @@ public class MainActivity extends FragmentActivity {
         double longitude = address.getLongitude();
 
         String country = address.getCountryName();
-
 
         gotoLocation(latitude, longitude);
 
