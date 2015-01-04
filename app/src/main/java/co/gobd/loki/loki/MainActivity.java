@@ -28,6 +28,7 @@ public class MainActivity extends FragmentActivity {
 
     private static final int GPS_ERRORDIALOG_REQUEST = 9001;
 
+    // Sample data to check the location
     private static final double SEATTLE_LAT = 47.60621,
             SEATTLE_LNG = -122.33207,
             SYDNEY_LAT = -33.867487,
@@ -35,8 +36,10 @@ public class MainActivity extends FragmentActivity {
             NEWYORK_LAT = 40.714353,
             NEWYORK_LNG = -74.005973;
 
+    // Camera zoom level
     private static final float DEFAULT_ZOOM = 3;
 
+    // Reference to map object
     GoogleMap mMap;
 
     @Override
@@ -90,7 +93,7 @@ public class MainActivity extends FragmentActivity {
         if (isAvailable == ConnectionResult.SUCCESS) {
             return true;
         } else if (GooglePlayServicesUtil.isUserRecoverableError(isAvailable)) {
-            // Dialog will be selected automatically
+            // Error dialog will be selected automatically, user doesn't need to know
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(isAvailable, this, GPS_ERRORDIALOG_REQUEST);
             dialog.show();
         } else {
@@ -100,6 +103,7 @@ public class MainActivity extends FragmentActivity {
         return false;
     }
 
+    // Map initialization
     private boolean initMap() {
         if (mMap == null) {
             // Get reference to the map fragment
@@ -111,13 +115,17 @@ public class MainActivity extends FragmentActivity {
         return (mMap != null);
     }
 
+    // Jumps to a specific location from given lat, lng
     private void gotoLocation(double lat, double lng) {
+        // Constructs a LatLng object with the given Lat and Lng
         LatLng latLng = new LatLng(lat, lng);
-        // Sets the initial camera position to this new location
+
+        // Sets the camera position to this new location
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
         mMap.moveCamera(cameraUpdate);
     }
 
+    // Jumps to a specific location from given lat, lng and zoom level
     private void gotoLocation(double lat, double lng, float zoom) {
         LatLng latLng = new LatLng(lat, lng);
         // Sets the initial camera position to this new location, with the default zoom level
@@ -125,14 +133,21 @@ public class MainActivity extends FragmentActivity {
         mMap.animateCamera(cameraUpdate);
     }
 
+    // Finds the location information using Geocoder
     public void geoLocate(View v) throws IOException {
         hideSoftKeyboard(v);
 
+        // User input
         EditText et_location = (EditText) findViewById(R.id.inputLocation);
         String location = et_location.getText().toString();
 
+        // Gecoder initialization
         Geocoder geocoder = new Geocoder(this);
+        // Creates a list of address information, second argument is the number of max result
         List<Address> addressList = geocoder.getFromLocationName(location, 1);
+
+        // we've set only one result, so no loop is needed.
+        // if max result > 1, we need to iterate through the list
         Address address = addressList.get(0);
         String locality = address.getLocality();
 
