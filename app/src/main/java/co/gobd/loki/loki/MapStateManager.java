@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * Created by tonmoy on 1/4/2015.
+ * Created by Fahim Masud Choudhury on 1/4/2015.
  */
 
 // Save map state after activity onCreate, onResume and screen rotation
