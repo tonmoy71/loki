@@ -6,6 +6,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
 import android.app.Dialog;
@@ -188,5 +189,29 @@ public class MainActivity extends ActionBarActivity {
     private void hideSoftKeyboard(View v) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MapStateManager manager = new MapStateManager(this);
+        manager.saveMapState(mMap);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Gets the saved map state from SharedPreferences
+        MapStateManager manager = new MapStateManager(this);
+        CameraPosition position = manager.getSavedCameraPosition();
+
+        if (position != null) {
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(position);
+
+            // Sets the map type as saved in the sharedPrefs
+            mMap.setMapType(manager.getMapType());
+            // Updates camera position
+            mMap.moveCamera(cameraUpdate);
+        }
     }
 }
